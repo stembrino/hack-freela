@@ -1,6 +1,6 @@
-import { Injectable } from '@nestjs/common';
-import { GoogleUser } from '../interfaces/google-user';
-import { JwtService } from '@nestjs/jwt';
+import { Injectable } from "@nestjs/common";
+import { GoogleUser } from "../interfaces/google-user";
+import { JwtService } from "@nestjs/jwt";
 
 @Injectable()
 export class AuthService {
