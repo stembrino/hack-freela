@@ -6,8 +6,8 @@ import { JwtService } from "@nestjs/jwt";
 export class AuthService {
   constructor(private readonly jwtService: JwtService) {}
 
-  googleLogin(user: GoogleUser) {
-    const token = this.jwtService.sign(user, {
+  async googleLogin(user: GoogleUser) {
+    const token = await this.jwtService.signAsync(user, {
       secret: process.env.JWT_SECRET,
     });
     return { token };

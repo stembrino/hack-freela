@@ -2,6 +2,7 @@ import { PassportStrategy } from "@nestjs/passport";
 import { Strategy } from "passport-google-oauth20";
 import { Injectable } from "@nestjs/common";
 import { AuthService } from "../services/auth.service";
+import { GoogleUser } from "../interfaces/google-user";
 
 @Injectable()
 export class GoogleStrategy extends PassportStrategy(Strategy, "google") {
@@ -42,12 +43,11 @@ export class GoogleStrategy extends PassportStrategy(Strategy, "google") {
   ) {
     const { id, displayName, emails, photos } = profile;
     console.log("VALIDATE", profile);
-    const user = {
-      id,
+    const user: GoogleUser = {
+      sub: id,
       name: displayName,
       email: emails[0]?.value,
       photo: photos[0]?.value,
-      accessToken,
     };
 
     done(null, user);
