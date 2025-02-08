@@ -5,14 +5,17 @@ import { AuthService } from "./services/auth.service";
 import { GoogleStrategy } from "./strategies/google.strategy";
 import { JwtStrategy } from "./strategies/jwt.strategy";
 import { JwtModule } from "@nestjs/jwt";
+import { ConfigModule } from "@nestjs/config";
 
 @Module({
   imports: [
     PassportModule,
-    JwtModule.register({
-      global: true,
-      secret: process.env.JWT_SECRET,
-      signOptions: { expiresIn: "1d" },
+    JwtModule.registerAsync({
+      imports: [ConfigModule],
+      useFactory: () => ({
+        secret: process.env.JWT_SECRET,
+        signOptions: { expiresIn: "1d" },
+      }),
     }),
   ],
   controllers: [AuthController],

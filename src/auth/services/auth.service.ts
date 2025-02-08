@@ -7,9 +7,7 @@ export class AuthService {
   constructor(private readonly jwtService: JwtService) {}
 
   async googleLogin(user: GoogleUser) {
-    const token = await this.jwtService.signAsync(user, {
-      secret: process.env.JWT_SECRET,
-    });
+    const token = await this.jwtService.signAsync(user);
     return { token };
   }
 
