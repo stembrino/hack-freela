@@ -14,8 +14,6 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
   }
 
   validate(payload: unknown) {
-    console.log("VALIDATE JWT TOKEN PAYLOAD", payload);
-
     return payload;
   }
 }

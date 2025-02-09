@@ -3,6 +3,9 @@ import { AuthService } from "../services/auth.service";
 import { GoogleAuthGuard } from "../guards/google-auth.guard";
 import { GoogleUser } from "../interfaces/google-user";
 import { AuthGuard } from "@nestjs/passport";
+import { Permissions } from "../decorators/roles.decorator";
+import { PermissionsGuard } from "../guards/permissions.guard";
+import { Role, RolePermissions } from "../enums/roles.enum";
 
 interface GoogleUserRequest extends Request {
   user: GoogleUser;
@@ -23,7 +26,8 @@ export class AuthController {
     return authResult;
   }
 
-  @UseGuards(AuthGuard("jwt"))
+  @UseGuards(AuthGuard("jwt"), PermissionsGuard)
+  @Permissions(...RolePermissions[Role.USER])
   @Get("profile")
   getProfile(@Request() req: { user: GoogleUser }) {
     return req.user;
