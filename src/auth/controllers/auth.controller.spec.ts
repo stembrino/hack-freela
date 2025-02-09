@@ -38,6 +38,7 @@ describe("AuthController", () => {
       const result = { token: "token" };
       jest.spyOn(authService, "googleLogin").mockReturnValue(result);
 
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
       expect(authController.googleAuthRedirect(req as any)).toBe(result);
       expect(authService.googleLogin).toHaveBeenCalledWith(req.user);
     });
