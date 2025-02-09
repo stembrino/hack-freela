@@ -8,25 +8,10 @@ import { Role, RolePermissions } from "../enums/roles.enum";
 @Injectable()
 export class GoogleStrategy extends PassportStrategy(Strategy, "google") {
   constructor(private authService: AuthService) {
-    const clientID = process.env.GOOGLE_CLIENT_ID;
-    const clientSecret = process.env.GOOGLE_CLIENT_SECRET;
-    const callbackURL =
-      process.env.GOOGLE_CALLBACK_URL ||
-      "http://localhost:3000/auth/google/redirect";
-
-    if (!clientID || !clientSecret) {
-      console.error(
-        "Google client ID or secret is not set in environment variables.",
-      );
-      throw new Error(
-        "Google client ID or secret is not set in environment variables.",
-      );
-    }
-
     super({
-      clientID,
-      clientSecret,
-      callbackURL,
+      clientID: process.env.GOOGLE_CLIENT_ID as string,
+      clientSecret: process.env.GOOGLE_CLIENT_SECRET as string,
+      callbackURL: process.env.GOOGLE_CALLBACK_URL,
       scope: ["email", "profile"],
     });
   }
