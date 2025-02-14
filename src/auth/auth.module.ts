@@ -6,6 +6,8 @@ import { GoogleStrategy } from "./strategies/google.strategy";
 import { JwtStrategy } from "./strategies/jwt.strategy";
 import { JwtModule } from "@nestjs/jwt";
 import { ConfigModule } from "@nestjs/config";
+import { RedisUserService } from "src/redis/services/redis-user.service";
+import { RedisModule } from "src/redis/redis.module";
 
 @Module({
   imports: [
@@ -17,9 +19,10 @@ import { ConfigModule } from "@nestjs/config";
         signOptions: { expiresIn: "1d" },
       }),
     }),
+    RedisModule,
   ],
   controllers: [AuthController],
-  providers: [AuthService, GoogleStrategy, JwtStrategy],
+  providers: [AuthService, GoogleStrategy, JwtStrategy, RedisUserService],
   exports: [AuthService],
 })
 export class AuthModule {}
