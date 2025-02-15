@@ -1,15 +1,11 @@
 // src/auth/services/user.service.ts
 import { Injectable } from "@nestjs/common";
 import { User } from "../entities/user.entity";
-import { InjectRepository } from "@nestjs/typeorm";
-import { Repository } from "typeorm";
+import { UserRepository } from "../repositories/user.repository";
 
 @Injectable()
 export class UserService {
-  constructor(
-    @InjectRepository(User)
-    private userRepository: Repository<User>,
-  ) {}
+  constructor(private readonly userRepository: UserRepository) {}
 
   async createUser(username: string, email: string): Promise<User> {
     const user = this.userRepository.create({ username, email });
@@ -19,5 +15,9 @@ export class UserService {
 
   async getUserById(id: number): Promise<User | null> {
     return this.userRepository.findOne({ where: { id } });
+  }
+
+  async geAllUsers(): Promise<User[]> {
+    return this.userRepository.find();
   }
 }

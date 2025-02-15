@@ -18,8 +18,14 @@ import { CreateUserDTO } from "../dto/craete-user.dto";
 export class UserController {
   constructor(private readonly userService: UserService) {}
 
+  @Get()
+  async getUser() {
+    const user = await this.userService.geAllUsers();
+    return { user: user };
+  }
+
   @Get(":id")
-  async getUser(@Param() param: { id: number }) {
+  async getUserById(@Param() param: { id: number }) {
     const user = await this.userService.getUserById(param.id);
     return { user: user };
   }
