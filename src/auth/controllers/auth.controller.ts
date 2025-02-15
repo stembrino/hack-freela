@@ -12,6 +12,7 @@ interface GoogleUserRequest extends Request {
   user: GoogleUser;
 }
 
+@UseGuards(AuthGuard("jwt"), PermissionsGuard)
 @Controller("auth")
 export class AuthController {
   constructor(
@@ -30,14 +31,12 @@ export class AuthController {
     return authResult;
   }
 
-  @UseGuards(AuthGuard("jwt"), PermissionsGuard)
   @Permissions(...RolePermissions[Role.USER])
   @Get("profile")
   getProfile(@Request() { user }: { user: GoogleUser }) {
     return user;
   }
 
-  @UseGuards(AuthGuard("jwt"), PermissionsGuard)
   @Get("debug")
   async getDebug(@Request() { user }: { user: GoogleUser }) {
     await this.redisUserService.createUser(

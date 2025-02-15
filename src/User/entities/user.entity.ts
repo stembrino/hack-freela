@@ -1,5 +1,5 @@
 // src/auth/entities/user.entity.ts
-import { Entity, PrimaryGeneratedColumn, Column } from "typeorm";
+import { Entity, PrimaryGeneratedColumn, Column, Unique } from "typeorm";
 
 @Entity()
 export class User {
@@ -10,5 +10,6 @@ export class User {
   username: string;
 
   @Column()
+  @Unique(["email"])
   email: string;
 }

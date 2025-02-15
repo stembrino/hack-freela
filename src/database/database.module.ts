@@ -1,6 +1,6 @@
 import { Module } from "@nestjs/common";
 import { TypeOrmModule } from "@nestjs/typeorm";
-import { User } from "./entities/user.entity";
+import { User } from "../User/entities/user.entity";
 
 @Module({
   imports: [
@@ -15,5 +15,6 @@ import { User } from "./entities/user.entity";
       synchronize: true, // Set to false in production
     }),
   ],
+  exports: [TypeOrmModule],
 })
 export class DatabaseModule {}
