@@ -28,6 +28,6 @@ import { RedisUserRepository } from "./repositories/redis-user.repository";
     RedisUserService,
     RedisUserRepository,
   ],
-  exports: [RedisUserService, RedisUserRepository],
+  exports: [RedisUserService],
 })
 export class RedisModule {}

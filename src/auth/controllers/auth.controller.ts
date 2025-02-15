@@ -40,7 +40,10 @@ export class AuthController {
   @UseGuards(AuthGuard("jwt"), PermissionsGuard)
   @Get("debug")
   async getDebug(@Request() { user }: { user: GoogleUser }) {
-    await this.redisUserService.createUser(Math.random().toString(), user.sub);
+    await this.redisUserService.createUser(
+      Math.random().toString(),
+      user.email,
+    );
     const debug = await this.redisUserService.debug();
 
     return { debug };
