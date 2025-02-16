@@ -1,0 +1,22 @@
+services:
+  mysql:
+    image: mysql:8.0 # Use a stable version with the alpine tag
+    container_name: hack-freela-mysql # Name the container
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: fabio # **REQUIRED** - Set a strong root password!
+      MYSQL_DATABASE: hack-freela # Optional: Creates a database on startup
+      MYSQL_USER: fabior # Optional: Creates a user
+      MYSQL_PASSWORD: fabio # Optional: Password for the user
+    ports:
+      - "3306:3306" # Expose MySQL on port 3306
+    volumes:
+      - mysql-data:/var/lib/mysql # Persist database data between container restarts
+    networks:
+      - app-network
+
+volumes:
+  mysql-data: {}
+networks:
+  app-network:
+    driver: bridge

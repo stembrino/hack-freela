@@ -1,0 +1,9 @@
+services:
+  redis:
+    image: redis:latest
+    container_name: redis-hf
+    ports:
+      - "6380:6379"
+    environment:
+      REDIS_PASSWORD: fabio
+    command: ["redis-server", "--requirepass", "fabio"]

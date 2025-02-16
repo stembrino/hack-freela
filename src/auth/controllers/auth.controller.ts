@@ -6,30 +6,42 @@ import { AuthGuard } from "@nestjs/passport";
 import { Permissions } from "../decorators/roles.decorator";
 import { PermissionsGuard } from "../guards/permissions.guard";
 import { Role, RolePermissions } from "../enums/roles.enum";
+import { RedisUserService } from "src/redis/services/redis-user.service";
 
 interface GoogleUserRequest extends Request {
   user: GoogleUser;
 }
 
-@Controller("auth")
+@Controller("auth/google")
 export class AuthController {
-  constructor(private readonly authService: AuthService) {}
+  constructor(
+    private readonly authService: AuthService,
+    private readonly redisUserService: RedisUserService,
+  ) {}
 
-  @Get("google")
+  @Get()
   @UseGuards(GoogleAuthGuard)
   async googleAuth() {}
 
-  @Get("google/redirect")
+  @Get("redirect")
   @UseGuards(GoogleAuthGuard)
   googleAuthRedirect(@Req() req: GoogleUserRequest) {
     const authResult = this.authService.googleLogin(req.user);
     return authResult;
   }
 
-  @UseGuards(AuthGuard("jwt"), PermissionsGuard)
   @Permissions(...RolePermissions[Role.USER])
   @Get("profile")
-  getProfile(@Request() req: { user: GoogleUser }) {
-    return req.user;
+  getProfile(@Request() { user }: { user: GoogleUser }) {
+    return user;
+  }
+
+  @Get("debug")
+  @UseGuards(AuthGuard("jwt"), PermissionsGuard)
+  // async getDebug(@Request() { user }: { user: GoogleUser }) {
+  async getDebug() {
+    const debug = await this.redisUserService.debug();
+
+    return { debug };
   }
 }
