@@ -10,15 +10,19 @@ export class RedisUserService {
     return await this.userRepository.getAllUsers();
   }
 
-  async createUser(id: string, user: any): Promise<void> {
-    await this.userRepository.setUser(id, user);
+  async createUser(sub: string, email: string): Promise<void> {
+    await this.userRepository.setUser(sub, email);
   }
 
-  async getUser(id: string): Promise<any> {
-    return this.userRepository.getUser(id);
+  async getUser(sub: string): Promise<any> {
+    return this.userRepository.getUser(sub);
   }
 
-  async deleteUser(id: string): Promise<void> {
-    await this.userRepository.deleteUser(id);
+  async deleteUser(sub: string): Promise<void> {
+    await this.userRepository.deleteUser(sub);
+  }
+
+  async hasUser(sub: string): Promise<boolean> {
+    return this.userRepository.hasUser(sub);
   }
 }

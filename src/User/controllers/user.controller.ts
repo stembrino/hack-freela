@@ -33,10 +33,7 @@ export class UserController {
   @Post()
   @UsePipes(new ValidationPipe({ whitelist: true }))
   async createUser(@Body() createuserDto: CreateUserDTO) {
-    const user = await this.userService.createUser(
-      createuserDto.username,
-      createuserDto.email,
-    );
+    const user = await this.userService.createUser(createuserDto.email);
     return { user: user };
   }
 }

@@ -7,10 +7,16 @@ import { UserRepository } from "../repositories/user.repository";
 export class UserService {
   constructor(private readonly userRepository: UserRepository) {}
 
-  async createUser(username: string, email: string): Promise<User> {
-    const user = this.userRepository.create({ username, email });
+  async createUser(email: string): Promise<User> {
+    try {
+      const user = this.userRepository.create({ email });
 
-    return this.userRepository.save(user);
+      console.info("INFO: user created", user);
+      return this.userRepository.save(user);
+    } catch (error) {
+      console.error("Error creating user", error);
+      throw error;
+    }
   }
 
   async getUserById(id: number): Promise<User | null> {

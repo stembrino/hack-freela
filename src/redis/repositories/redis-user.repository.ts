@@ -6,17 +6,23 @@ import { Redis } from "ioredis";
 export class RedisUserRepository {
   constructor(@Inject("RedisClient") private readonly redis: Redis) {}
 
-  async setUser(id: string, user: any): Promise<void> {
-    await this.redis.set(`${id}`, JSON.stringify(user));
+  async setUser(sub: string, email: string): Promise<boolean> {
+    try {
+      await this.redis.set(`user:${sub}`, email);
+      return true;
+    } catch (e) {
+      console.error("Error storing user in redis", e);
+      return false;
+    }
   }
 
-  async getUser(id: string): Promise<any> {
-    const user = await this.redis.get(`user:${id}`);
+  async getUser(sub: string): Promise<any> {
+    const user = await this.redis.get(`user:${sub}`);
     return user ? JSON.parse(user) : null;
   }
 
-  async deleteUser(id: string): Promise<void> {
-    await this.redis.del(`user:${id}`);
+  async deleteUser(sub: string): Promise<void> {
+    await this.redis.del(`user:${sub}`);
   }
 
   async getAllUsers(): Promise<string[]> {
@@ -30,5 +36,14 @@ export class RedisUserRepository {
     return values.map((user) => {
       return JSON.parse(user) as string;
     });
+  }
+
+  async hasUser(sub: string): Promise<boolean> {
+    try {
+      return !!(await this.redis.exists(`user:${sub}`));
+    } catch (e) {
+      console.error("Error checking user in redis", e);
+      return false;
+    }
   }
 }

@@ -12,19 +12,18 @@ interface GoogleUserRequest extends Request {
   user: GoogleUser;
 }
 
-@UseGuards(AuthGuard("jwt"), PermissionsGuard)
-@Controller("auth")
+@Controller("auth/google")
 export class AuthController {
   constructor(
     private readonly authService: AuthService,
     private readonly redisUserService: RedisUserService,
   ) {}
 
-  @Get("google")
+  @Get()
   @UseGuards(GoogleAuthGuard)
   async googleAuth() {}
 
-  @Get("google/redirect")
+  @Get("redirect")
   @UseGuards(GoogleAuthGuard)
   googleAuthRedirect(@Req() req: GoogleUserRequest) {
     const authResult = this.authService.googleLogin(req.user);
@@ -38,11 +37,9 @@ export class AuthController {
   }
 
   @Get("debug")
-  async getDebug(@Request() { user }: { user: GoogleUser }) {
-    await this.redisUserService.createUser(
-      Math.random().toString(),
-      user.email,
-    );
+  @UseGuards(AuthGuard("jwt"), PermissionsGuard)
+  // async getDebug(@Request() { user }: { user: GoogleUser }) {
+  async getDebug() {
     const debug = await this.redisUserService.debug();
 
     return { debug };
