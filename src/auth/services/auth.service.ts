@@ -2,7 +2,7 @@ import { Injectable } from "@nestjs/common";
 import { GoogleUser } from "../interfaces/google-user";
 import { JwtService } from "@nestjs/jwt";
 import { RedisUserService } from "src/redis/services/redis-user.service";
-import { UserService } from "src/User/services/user.service";
+import { UserService } from "src/user/services/user.service";
 
 @Injectable()
 export class AuthService {

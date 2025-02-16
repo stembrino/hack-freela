@@ -34,7 +34,7 @@ export class RedisUserRepository {
     const values = (await this.redis.mget(keys)) as string[];
     console.debug("DEBUG values:", values);
     return values.map((user) => {
-      return JSON.parse(user) as string;
+      return user;
     });
   }
 

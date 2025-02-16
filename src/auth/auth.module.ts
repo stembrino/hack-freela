@@ -7,7 +7,7 @@ import { JwtStrategy } from "./strategies/jwt.strategy";
 import { JwtModule } from "@nestjs/jwt";
 import { ConfigModule } from "@nestjs/config";
 import { RedisModule } from "src/redis/redis.module";
-import { UserModule } from "src/User/User.module";
+import { UserModule } from "src/user/User.module";
 
 @Module({
   imports: [
