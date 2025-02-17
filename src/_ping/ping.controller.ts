@@ -4,6 +4,8 @@ import { AuthGuard } from "@nestjs/passport";
 import { Role, RolePermissions } from "src/auth/enums/roles.enum";
 import { Permissions } from "src/auth/decorators/roles.decorator";
 import { RedisUserService } from "src/redis/services/redis-user.service";
+import { CurrentUser } from "src/auth/decorators/current-user.decorator";
+import { GoogleUser } from "src/auth/interfaces/google-user";
 
 @UseGuards(AuthGuard("jwt"), PermissionsGuard)
 @Controller("ping")
@@ -16,8 +18,8 @@ export class PingController {
   }
 
   @Permissions(...RolePermissions[Role.USER])
-  @Get()
-  pingRole() {
-    return { ping: "pong" };
+  @Get("pong")
+  pingRole(@CurrentUser() user: GoogleUser) {
+    return { ping: "ping", user };
   }
 }
