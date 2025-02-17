@@ -30,15 +30,16 @@ export class AuthController {
     return authResult;
   }
 
-  @Permissions(...RolePermissions[Role.USER])
   @Get("profile")
+  @Permissions(...RolePermissions[Role.USER])
+  @UseGuards(AuthGuard("jwt"), PermissionsGuard)
   getProfile(@Request() { user }: { user: GoogleUser }) {
+    console.info("INFO: user", user);
     return user;
   }
 
   @Get("debug")
   @UseGuards(AuthGuard("jwt"), PermissionsGuard)
-  // async getDebug(@Request() { user }: { user: GoogleUser }) {
   async getDebug() {
     const debug = await this.redisUserService.debug();
 

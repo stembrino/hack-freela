@@ -21,7 +21,6 @@ export class PermissionsGuard implements CanActivate {
       console.warn("No user found in request");
       return false;
     }
-    // TEMP: this is just to debug
     const userPermissions: Permission[] = user.permissions;
 
     return requiredPermissions.every((permission) =>
