@@ -1,0 +1,34 @@
+services:
+  mysql:
+    image: mysql:8.0
+    container_name: hack-freela-mysql
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: fabio
+      MYSQL_DATABASE: hack-freela
+      MYSQL_USER: fabior
+      MYSQL_PASSWORD: fabio
+    ports:
+      - "3306:3306"
+    volumes:
+      - mysql-data:/var/lib/mysql
+    networks:
+      - app-network
+
+  redis:
+    image: redis:latest
+    container_name: redis-hf
+    ports:
+      - "6380:6379"
+    environment:
+      REDIS_PASSWORD: fabio
+    command: ["redis-server", "--requirepass", "fabio"]
+    networks:
+      - app-network
+
+networks:
+  app-network:
+    driver: bridge
+
+volumes:
+  mysql-data: {}
