@@ -7,9 +7,15 @@ import { UserRepository } from "../repositories/user.repository";
 export class UserService {
   constructor(private readonly userRepository: UserRepository) {}
 
-  async createUser(email: string): Promise<User> {
+  async createUser({
+    sub,
+    email,
+  }: {
+    sub: string;
+    email: string;
+  }): Promise<User> {
     try {
-      const user = this.userRepository.create({ email });
+      const user = this.userRepository.create({ sub, email });
 
       console.info("INFO: user created", user);
       return this.userRepository.save(user);
@@ -20,10 +26,15 @@ export class UserService {
   }
 
   async getUserById(id: number): Promise<User | null> {
-    return this.userRepository.findOne({ where: { id } });
+    return this.userRepository.findOne({
+      where: { id },
+      relations: ["product"],
+    });
   }
 
   async geAllUsers(): Promise<User[]> {
-    return this.userRepository.find();
+    return this.userRepository.find({
+      relations: ["product"],
+    });
   }
 }

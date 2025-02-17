@@ -19,7 +19,7 @@ export class AuthService {
       return { token };
     }
     await this.rediService.createUser(user.sub, user.email);
-    await this.userService.createUser(user.email);
+    await this.userService.createUser({ sub: user.sub, email: user.email });
     return { token };
   }
 
