@@ -1,7 +1,5 @@
 import { DataSource } from "typeorm";
 import * as dotenv from "dotenv";
-import { Customer } from "src/user/entities/customer.entity";
-import { Driver } from "src/user/entities/driver.entity";
 
 dotenv.config({ path: `.env.${process.env.NODE_ENV || "dev"}` });
 
@@ -12,7 +10,7 @@ export const AppDataSource = new DataSource({
   username: process.env.DB_USERNAME || "root",
   password: process.env.DB_PASSWORD,
   database: process.env.DB_DATABASE,
-  entities: [Customer, Driver],
+  entities: ["dist/src/**/*.entity.js"],
   migrations: ["dist/db/migrations/*"],
   synchronize: false, // Set to false in production (use migrations instead)
   logging: true, // Enable logging (optional, can be turned off in production)
