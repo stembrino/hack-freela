@@ -4,7 +4,6 @@ import { ConfigModule } from "@nestjs/config";
 import { PingModule } from "./_ping/ping.module";
 import { DatabaseModule } from "./database/database.module";
 import { UserModule } from "./user/user.module";
-import { ProductModule } from "./product/product.module";
 
 @Module({
   imports: [
@@ -16,7 +15,6 @@ import { ProductModule } from "./product/product.module";
     PingModule,
     DatabaseModule,
     UserModule,
-    ProductModule,
   ],
 })
 export class AppModule {}

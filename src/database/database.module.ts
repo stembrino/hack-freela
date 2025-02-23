@@ -1,20 +1,20 @@
 import { Module } from "@nestjs/common";
 import { TypeOrmModule } from "@nestjs/typeorm";
-import { User } from "../user/entities/user.entity";
+import { Customer } from "../user/entities/customer.entity";
 import { ConfigService } from "@nestjs/config";
-import { Product } from "src/product/entities/product.entity";
+import { Driver } from "src/user/entities/driver.entity";
 
 @Module({
   imports: [
     TypeOrmModule.forRootAsync({
-      useFactory: (configService: ConfigService) => ({
+      useFactory: () => ({
         type: "mysql",
-        host: configService.get<string>("DB_HOST"),
-        port: configService.get<number>("DB_PORT"),
-        username: configService.get<string>("DB_USERNAME"),
-        password: configService.get<string>("DB_PASSWORD"),
-        database: configService.get<string>("DB_DATABASE"),
-        entities: [User, Product],
+        host: process.env.DB_HOST,
+        port: (process.env.DB_PORT || 3306) as number,
+        username: process.env.DB_USERNAME,
+        password: process.env.DB_PASSWORD,
+        database: process.env.DB_DATABASE,
+        entities: [Customer, Driver],
         synchronize: true, // Set to false in production
       }),
       inject: [ConfigService],

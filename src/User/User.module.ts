@@ -1,14 +1,21 @@
 import { Module } from "@nestjs/common";
 import { TypeOrmModule } from "@nestjs/typeorm";
-import { User } from "./entities/user.entity";
-import { UserRepository } from "./repositories/user.repository";
-import { UserController } from "./controllers/user.controller";
-import { UserService } from "./services/user.service";
+import { Customer } from "./entities/customer.entity";
+import { CustomerRepository } from "./repositories/customer.repository";
+import { UserController } from "./controllers/customer.controller";
+import { CustomerService } from "./services/driver.service";
+import { DriverRepository } from "./repositories/driver.repository";
+import { DriverService } from "./services/customer.service copy";
 
 @Module({
-  imports: [TypeOrmModule.forFeature([User])],
+  imports: [TypeOrmModule.forFeature([Customer])],
   controllers: [UserController],
-  providers: [UserService, UserRepository],
-  exports: [UserService],
+  providers: [
+    DriverService,
+    CustomerService,
+    DriverRepository,
+    CustomerRepository,
+  ],
+  exports: [CustomerService, DriverService],
 })
 export class UserModule {}
