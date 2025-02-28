@@ -1,8 +1,9 @@
 import { Module } from "@nestjs/common";
 import { TypeOrmModule } from "@nestjs/typeorm";
-import { Customer } from "../user/entities/customer.entity";
 import { ConfigService } from "@nestjs/config";
-import { Driver } from "src/user/entities/driver.entity";
+import { Customer } from "src/user/entities/customer.entity";
+import { Worker } from "src/worker/entities/worker.entity";
+import { WorkerCategory } from "src/worker/entities/worker-category.entity";
 
 @Module({
   imports: [
@@ -14,7 +15,7 @@ import { Driver } from "src/user/entities/driver.entity";
         username: process.env.DB_USERNAME,
         password: process.env.DB_PASSWORD,
         database: process.env.DB_DATABASE,
-        entities: [Customer, Driver],
+        entities: [Customer, Worker, WorkerCategory],
         synchronize: true, // Set to false in production
       }),
       inject: [ConfigService],

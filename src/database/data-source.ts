@@ -15,3 +15,5 @@ export const AppDataSource = new DataSource({
   synchronize: false, // Set to false in production (use migrations instead)
   logging: true, // Enable logging (optional, can be turned off in production)
 });
+
+// INFO: to run the migration: `npm run migration:gen` & replace the name file in MIGRATION_NAME command
