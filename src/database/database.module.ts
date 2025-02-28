@@ -16,7 +16,7 @@ import { WorkerCategory } from "src/worker/entities/worker-category.entity";
         password: process.env.DB_PASSWORD,
         database: process.env.DB_DATABASE,
         entities: [Customer, Worker, WorkerCategory],
-        synchronize: true, // Set to false in production
+        synchronize: true,
       }),
       inject: [ConfigService],
     }),

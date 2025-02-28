@@ -2,6 +2,7 @@ import { Injectable } from "@nestjs/common";
 import { Worker } from "../entities/worker.entity";
 import { WorkerCategoryRepository } from "../repositories/worker-category.repository";
 import { WorkerRepository } from "../repositories/worker.repository";
+import { CreateWorkerDto } from "../dto/create-worker.dto";
 
 @Injectable()
 export class WorkerService {
@@ -10,14 +11,18 @@ export class WorkerService {
     private workerCategoryRepository: WorkerCategoryRepository,
   ) {}
 
-  async createWorker(name: string, categoryId: number): Promise<Worker> {
+  async createWorker(workerData: CreateWorkerDto): Promise<Worker> {
     const category = await this.workerCategoryRepository.findOne({
-      where: { id: categoryId },
+      where: { id: workerData.categoryId },
     });
     if (!category) {
       throw new Error("Category not found");
     }
-    const worker = this.workerRepository.create({ name, category });
+    const worker = this.workerRepository.create({
+      ...workerData,
+      category,
+    });
+
     return this.workerRepository.save(worker);
   }
 
