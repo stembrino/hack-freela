@@ -6,12 +6,15 @@ import { GoogleUser } from "../interfaces/google-user";
 import { Role, RolePermissions } from "../enums/roles.enum";
 
 @Injectable()
-export class GoogleStrategy extends PassportStrategy(Strategy, "google") {
+export class GoogleCustomerStrategy extends PassportStrategy(
+  Strategy,
+  "google-customer",
+) {
   constructor(private authService: AuthService) {
     super({
       clientID: process.env.GOOGLE_CLIENT_ID as string,
       clientSecret: process.env.GOOGLE_CLIENT_SECRET as string,
-      callbackURL: process.env.GOOGLE_CALLBACK_URL,
+      callbackURL: process.env.GOOGLE_CUSTOMER_CALLBACK_URL,
       scope: ["email", "profile"],
     });
   }
@@ -33,7 +36,10 @@ export class GoogleStrategy extends PassportStrategy(Strategy, "google") {
       name: displayName,
       email: emails[0]?.value,
       photo: photos[0]?.value,
-      permissions: RolePermissions[Role.USER],
+      permissions: [
+        ...RolePermissions[Role.CUSTOMER],
+        ...RolePermissions[Role.USER],
+      ],
     };
 
     done(null, user);

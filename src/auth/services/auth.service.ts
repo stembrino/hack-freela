@@ -2,7 +2,7 @@ import { Injectable } from "@nestjs/common";
 import { GoogleUser } from "../interfaces/google-user";
 import { JwtService } from "@nestjs/jwt";
 import { RedisUserService } from "src/redis/services/redis-user.service";
-import { CustomerService } from "src/user/services/driver.service";
+import { CustomerService } from "src/user/services/customer.service";
 
 @Injectable()
 export class AuthService {
@@ -12,7 +12,18 @@ export class AuthService {
     private readonly userService: CustomerService,
   ) {}
 
-  async googleLogin(user: GoogleUser) {
+  async customerGoogleLogin(user: GoogleUser) {
+    const token = this.jwtService.sign(user);
+    const hasStoredUser = await this.rediService.hasUser(user.sub);
+    if (hasStoredUser) {
+      return { token };
+    }
+    await this.rediService.createUser(user.sub, user.email);
+    await this.userService.createCustomer({ sub: user.sub, email: user.email });
+    return { token };
+  }
+
+  async workerGoogleLogin(user: GoogleUser) {
     const token = this.jwtService.sign(user);
     const hasStoredUser = await this.rediService.hasUser(user.sub);
     if (hasStoredUser) {

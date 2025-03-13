@@ -2,12 +2,13 @@ import { Module } from "@nestjs/common";
 import { PassportModule } from "@nestjs/passport";
 import { AuthController } from "./controllers/auth.controller";
 import { AuthService } from "./services/auth.service";
-import { GoogleStrategy } from "./strategies/google.strategy";
+import { GoogleCustomerStrategy } from "./strategies/google-customer.strategy";
 import { JwtStrategy } from "./strategies/jwt.strategy";
 import { JwtModule } from "@nestjs/jwt";
 import { ConfigModule } from "@nestjs/config";
 import { RedisModule } from "src/redis/redis.module";
-import { UserModule } from "src/user/user.module";
+import { CustomerModule } from "src/user/customer.module";
+import { GoogleWorkerStrategy } from "./strategies/google-worker.strategy";
 
 @Module({
   imports: [
@@ -20,9 +21,14 @@ import { UserModule } from "src/user/user.module";
       }),
     }),
     RedisModule,
-    UserModule,
+    CustomerModule,
   ],
   controllers: [AuthController],
-  providers: [AuthService, GoogleStrategy, JwtStrategy],
+  providers: [
+    AuthService,
+    GoogleCustomerStrategy,
+    GoogleWorkerStrategy,
+    JwtStrategy,
+  ],
 })
 export class AuthModule {}

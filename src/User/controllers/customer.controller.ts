@@ -1,11 +1,11 @@
 import { Controller, Get, Param, UseGuards } from "@nestjs/common";
 import { AuthGuard } from "@nestjs/passport";
 import { PermissionsGuard } from "src/auth/guards/permissions.guard";
-import { CustomerService } from "../services/driver.service";
+import { CustomerService } from "../services/customer.service";
 
-@Controller("user")
+@Controller("customer")
 @UseGuards(AuthGuard("jwt"), PermissionsGuard)
-export class UserController {
+export class CustomerController {
   constructor(private readonly customerService: CustomerService) {}
 
   // @Get()

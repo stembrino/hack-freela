@@ -16,6 +16,7 @@ export class CustomerService {
     try {
       const customer = this.customerRepository.create({ sub, email });
 
+      console.log("🐛 - customer.service.ts - customer:", customer);
       console.info("INFO: customer created", customer);
       return this.customerRepository.save(customer);
     } catch (error) {

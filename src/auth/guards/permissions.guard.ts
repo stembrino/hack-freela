@@ -1,6 +1,6 @@
 import { Injectable, CanActivate, ExecutionContext } from "@nestjs/common";
 import { Reflector } from "@nestjs/core";
-import { Permission } from "../enums/permissions.enum";
+import { UserPermission } from "../enums/permissions.enum";
 import { User } from "../interfaces/google-user";
 
 @Injectable()
@@ -8,7 +8,7 @@ export class PermissionsGuard implements CanActivate {
   constructor(private reflector: Reflector) {}
 
   canActivate(context: ExecutionContext): boolean {
-    const requiredPermissions = this.reflector.get<Permission[]>(
+    const requiredPermissions = this.reflector.get<UserPermission[]>(
       "permissions",
       context.getHandler(),
     );
@@ -21,7 +21,7 @@ export class PermissionsGuard implements CanActivate {
       console.warn("No user found in request");
       return false;
     }
-    const userPermissions: Permission[] = user.permissions;
+    const userPermissions: string[] = user.permissions;
 
     return requiredPermissions.every((permission) =>
       userPermissions.includes(permission),
