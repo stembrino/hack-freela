@@ -1,9 +1,7 @@
-import { Permission } from "../enums/permissions.enum";
-
 export interface User {
   name: string;
   email: string;
-  permissions: Permission[];
+  permissions: string[];
 }
 
 export interface GoogleUser extends User {

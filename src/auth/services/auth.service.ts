@@ -12,7 +12,18 @@ export class AuthService {
     private readonly userService: CustomerService,
   ) {}
 
-  async googleLogin(user: GoogleUser) {
+  async customerGoogleLogin(user: GoogleUser) {
+    const token = this.jwtService.sign(user);
+    const hasStoredUser = await this.rediService.hasUser(user.sub);
+    if (hasStoredUser) {
+      return { token };
+    }
+    await this.rediService.createUser(user.sub, user.email);
+    await this.userService.createCustomer({ sub: user.sub, email: user.email });
+    return { token };
+  }
+
+  async workerGoogleLogin(user: GoogleUser) {
     const token = this.jwtService.sign(user);
     const hasStoredUser = await this.rediService.hasUser(user.sub);
     if (hasStoredUser) {

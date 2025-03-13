@@ -1,5 +1,10 @@
 import { SetMetadata } from "@nestjs/common";
-import { Permission } from "../enums/permissions.enum";
+import {
+  UserPermission,
+  WorkerPrmission,
+  CustomerPermission,
+} from "../enums/permissions.enum";
 
-export const Permissions = (...permissions: Permission[]) =>
-  SetMetadata("permissions", permissions);
+export const Permissions = (
+  ...permissions: UserPermission[] | WorkerPrmission[] | CustomerPermission[]
+) => SetMetadata("permissions", permissions);
