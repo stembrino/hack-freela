@@ -13,31 +13,41 @@ interface GoogleUserRequest extends Request {
   user: GoogleUser;
 }
 
-@Controller("auth/google")
+@Controller("auth")
 export class AuthController {
   constructor(
     private readonly authService: AuthService,
     private readonly redisUserService: RedisUserService,
   ) {}
 
-  @Get("customer")
+  @Get("/google/customer")
   @UseGuards(GoogleCustomerAuthGuard)
   async googleAuthCustomer() {}
 
-  @Get("worker")
+  @Get("/google/worker")
   @UseGuards(GoogleWorkerAuthGuard)
   async googleAuthWorker() {}
 
-  @Get("customer/redirect")
+  @Get("/google/customer/redirect")
   @UseGuards(GoogleCustomerAuthGuard)
-  async googleCustomerRedirect(@Req() req: GoogleUserRequest) {
+  googleCustomerRedirect(@Req() req: GoogleUserRequest) {
     return this.authService.customerGoogleLogin(req.user);
   }
 
-  @Get("worker/redirect")
+  @Get("/google/worker/redirect")
   @UseGuards(GoogleWorkerAuthGuard)
-  async googleWorkerRedirect(@Req() req: GoogleUserRequest) {
+  googleWorkerRedirect(@Req() req: GoogleUserRequest) {
     return this.authService.workerGoogleLogin(req.user);
+  }
+
+  @Get("refresh-token")
+  @UseGuards(AuthGuard("jwt"), PermissionsGuard)
+  refreshToken(@Req() req: Request & { headers: { authorization?: string } }) {
+    const authHeader = req.headers.authorization as string;
+    const token = authHeader.split(" ")[1];
+    const newToken = this.authService.refreshToken(token);
+
+    return { token: newToken };
   }
 
   @Get("profile")

@@ -12,30 +12,27 @@ export class AuthService {
     private readonly userService: CustomerService,
   ) {}
 
-  async customerGoogleLogin(user: GoogleUser) {
+  customerGoogleLogin(user: GoogleUser) {
     const token = this.jwtService.sign(user);
-    const hasStoredUser = await this.rediService.hasUser(user.sub);
-    if (hasStoredUser) {
-      return { token };
-    }
-    await this.rediService.createUser(user.sub, user.email);
-    await this.userService.createCustomer({ sub: user.sub, email: user.email });
     return { token };
   }
 
-  async workerGoogleLogin(user: GoogleUser) {
+  workerGoogleLogin(user: GoogleUser) {
     const token = this.jwtService.sign(user);
-    const hasStoredUser = await this.rediService.hasUser(user.sub);
-    if (hasStoredUser) {
-      return { token };
-    }
-    await this.rediService.createUser(user.sub, user.email);
-    await this.userService.createCustomer({ sub: user.sub, email: user.email });
     return { token };
   }
 
-  // validateUser(token: string): Promise<{ userId: string; username: string }> {
-  //   const decoded = this.jwtService.verify(token);
-  //   return { userId: decoded.sub, username: decoded.username };
-  // }
+  refreshToken(token: string) {
+    try {
+      const decoded = this.jwtService.verify<GoogleUser>(token);
+      // @ts-expect-error Intentionally ignore unused vars
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
+      const { iat, exp, ...tokenData } = decoded;
+      const newToken = this.jwtService.sign({ ...tokenData });
+
+      return newToken;
+    } catch (e) {
+      throw new Error(`Invalid token, error: ${e}`);
+    }
+  }
 }
