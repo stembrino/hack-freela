@@ -60,9 +60,7 @@ export class AuthController {
 
   @Get("debug")
   @UseGuards(AuthGuard("jwt"), PermissionsGuard)
-  async getDebug() {
-    const debug = await this.redisUserService.debug();
-
-    return { debug };
+  getDebug() {
+    return { debug: "dummy reply" };
   }
 }

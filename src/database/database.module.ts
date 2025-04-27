@@ -4,6 +4,7 @@ import { ConfigService } from "@nestjs/config";
 import { Customer } from "src/user/entities/customer.entity";
 import { Worker } from "src/worker/entities/worker.entity";
 import { WorkerCategory } from "src/worker/entities/worker-category.entity";
+import { WorkerCategoryExperience } from "src/worker/entities/worker-category-experience.entity";
 
 @Module({
   imports: [
@@ -15,7 +16,7 @@ import { WorkerCategory } from "src/worker/entities/worker-category.entity";
         username: process.env.DB_USERNAME,
         password: process.env.DB_PASSWORD,
         database: process.env.DB_DATABASE,
-        entities: [Customer, Worker, WorkerCategory],
+        entities: [Customer, Worker, WorkerCategory, WorkerCategoryExperience],
         synchronize: true,
       }),
       inject: [ConfigService],

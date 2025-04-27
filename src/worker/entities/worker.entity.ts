@@ -1,11 +1,5 @@
-import {
-  Entity,
-  PrimaryGeneratedColumn,
-  Column,
-  ManyToOne,
-  JoinColumn,
-} from "typeorm";
-import { WorkerCategory } from "./worker-category.entity";
+import { Entity, PrimaryGeneratedColumn, Column, OneToMany } from "typeorm";
+import { WorkerCategoryExperience } from "./worker-category-experience.entity";
 
 @Entity()
 export class Worker {
@@ -15,10 +9,8 @@ export class Worker {
   @Column()
   name: string;
 
-  @Column()
-  age: number;
-
-  @ManyToOne(() => WorkerCategory)
-  @JoinColumn({ name: "categoryId" })
-  category: WorkerCategory;
+  @OneToMany(() => WorkerCategoryExperience, (wce) => wce.worker, {
+    cascade: true,
+  })
+  experiences?: WorkerCategoryExperience[];
 }

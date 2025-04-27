@@ -3,52 +3,53 @@ import { Worker } from "../entities/worker.entity";
 import { WorkerCategoryRepository } from "../repositories/worker-category.repository";
 import { WorkerRepository } from "../repositories/worker.repository";
 import { CreateWorkerDto } from "../dto/create-worker.dto";
+import { WorkerCategoryExperienceService } from "./worker-category-experience.service";
 
 @Injectable()
 export class WorkerService {
   constructor(
-    private workerRepository: WorkerRepository,
-    private workerCategoryRepository: WorkerCategoryRepository,
+    private wRepository: WorkerRepository,
+    private wCategoryRepository: WorkerCategoryRepository,
+    private wExperienceService: WorkerCategoryExperienceService,
   ) {}
 
   async createWorker(workerData: CreateWorkerDto): Promise<Worker> {
-    const category = await this.workerCategoryRepository.findOne({
+    // TODO: improve category vall: using cache, check if use Redis or jusct cache in memory
+    const category = await this.wCategoryRepository.findOne({
       where: { id: workerData.categoryId },
     });
     if (!category) {
       throw new Error("Category not found");
     }
-    const worker = this.workerRepository.create({
+    const worker = this.wRepository.create({
       ...workerData,
-      category,
     });
+    return this.wRepository.save(worker);
+  }
 
-    return this.workerRepository.save(worker);
+  async addExperienceToWorker(
+    workerId: number,
+    experienceData: any,
+  ): Promise<any> {
+    const worker = await this.wRepository.findOne({
+      where: { id: workerId },
+    });
+    if (!worker) {
+      throw new Error("Worker not found");
+    }
+    return this.wExperienceService.addExperienceToWorker(
+      worker.id,
+      experienceData,
+    );
   }
 
   async findAllWorkers(): Promise<Worker[]> {
-    return this.workerRepository.find({ relations: ["category"] });
+    return this.wRepository.find({
+      relations: ["experiences", "experiences.category"],
+    });
   }
 
-  //   async updateWorker(
-  //     id: number,
-  //     name: string,
-  //     categoryId: number,
-  //   ): Promise<Worker> {
-  //     const worker = await this.workerRepository.findOne(id);
-  //     if (!worker) {
-  //       throw new Error("Worker not found");
-  //     }
-  //     const category = await this.workerCategoryRepository.findOne(categoryId);
-  //     if (!category) {
-  //       throw new Error("Category not found");
-  //     }
-  //     worker.name = name;
-  //     worker.category = category;
-  //     return this.workerRepository.save(worker);
-  //   }
-
   async deleteWorker(id: number): Promise<void> {
-    await this.workerRepository.delete(id);
+    await this.wRepository.delete(id);
   }
 }

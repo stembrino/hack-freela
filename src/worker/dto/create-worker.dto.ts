@@ -7,9 +7,9 @@ export class CreateWorkerDto {
 
   @IsNotEmpty()
   @IsNumber()
-  age: number;
+  categoryId: number;
 
   @IsNotEmpty()
   @IsNumber()
-  categoryId: number;
+  experienceYears: number;
 }

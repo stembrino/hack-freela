@@ -6,7 +6,9 @@ import { Worker } from "./entities/worker.entity";
 import { WorkerCategory } from "./entities/worker-category.entity";
 import { WorkerRepository } from "./repositories/worker.repository";
 import { WorkerCategoryRepository } from "./repositories/worker-category.repository";
-import { WorkerCategoryController } from "./controllers/worker-category.controller";
+import { WorkerCategoryExperience } from "./entities/worker-category-experience.entity";
+import { WorkerCategoryExperienceRepository } from "./repositories/worker-category-experience.repository";
+import { WorkerCategoryExperienceService } from "./services/worker-category-experience.service";
 
 @Module({
   imports: [TypeOrmModule.forFeature([Worker, WorkerCategory])],
@@ -15,7 +17,9 @@ import { WorkerCategoryController } from "./controllers/worker-category.controll
     WorkerRepository,
     WorkerService,
     WorkerCategoryRepository,
-    WorkerCategoryController,
+    WorkerCategoryExperience,
+    WorkerCategoryExperienceRepository,
+    WorkerCategoryExperienceService,
   ],
 })
 export class WorkerModule {}
